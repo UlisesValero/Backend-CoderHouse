@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const fs = require('fs')
 const CartManager = require('../../managers/CartsManager')
 const ProductManager = require('../../managers/ProductManager')
 
@@ -7,9 +6,9 @@ const ProductManager = require('../../managers/ProductManager')
 const cartsRouter = Router()
 
 
-cartsRouter.get('/carts/:cid', (req, res) => {
+cartsRouter.get('/:cid', (req, res) => {
     try {
-        const cartOrder = new CartManager('./carts.json')
+        const cartOrder = new CartManager('./src/carts.json')
         const filterOrder = cartOrder.searchOrderById(parseInt(req.params.cid))
         res.status(200).json({
             message: "Orden obtenida con éxito",
@@ -23,9 +22,9 @@ cartsRouter.get('/carts/:cid', (req, res) => {
     }
 })
 
-cartsRouter.post('/carts', (req, res) => {
+cartsRouter.post('/', (req, res) => {
     try {
-        const cartOrder = new CartManager('./carts.json')
+        const cartOrder = new CartManager('./src/carts.json')
         const postOrder = cartOrder.addOrder()
         res.status(201).json({
             message: "Orden agregada",
@@ -39,10 +38,10 @@ cartsRouter.post('/carts', (req, res) => {
     }
 })
 
-cartsRouter.post('/carts/:cid/products/:pid', (req, res) => {
+cartsRouter.post('/:cid/products/:pid', (req, res) => {
     try {
-        const cartManager = new CartManager('./carts.json')
-        const productManager = new ProductManager('./products.json')
+        const cartManager = new CartManager('./src/carts.json')
+        const productManager = new ProductManager('./src/products.json')
         const cid = parseInt(req.params.cid)
         const pid = parseInt(req.params.pid)
         const cart = cartManager.searchOrderById(cid)
