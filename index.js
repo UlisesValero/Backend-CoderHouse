@@ -1,21 +1,27 @@
-const express = require('express')
-const cartsRouter = require('./src/router/carts.router')
-const productRouter = require('./src/router/product.router')
+import express from 'express'
+import handlebars from 'express-handlebars'
+import http from 'http'
+import { Server } from 'socket.io'
+import productsRouter from './src/routes/products.router.js'
+
 
 const app = express()
-app.use(express.json())
-app.use('/api/carts', cartsRouter)
-app.use('/api/products', productRouter)
-
 const PORT = 8080
-app.listen(PORT, () => {
+app.use(express.json())
+
+const server = http.createServer(app)
+
+app.engine('handlebars', handlebars.engine())
+app.set('view engine', 'handlebars')
+app.set('views', './views')
+app.use(express.static('./public'))
+
+app.use('/', productsRouter)
+
+server.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`)
 })
 
-
-
-
-
-
+const sockets = new Server(server)
 
 
