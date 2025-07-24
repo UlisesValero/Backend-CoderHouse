@@ -1,7 +1,9 @@
 import { Router } from 'express'
+// import { readFileSync } from 'node:fs'
+
 
 const router = Router()
-const products = [{name: "Ulises", price: 105, description:"Esta es la desc"}]
+const products = []
 
 router.get('/', (req, res) => {
     res.render('home', {products})
@@ -26,5 +28,22 @@ router.post('/', (req, res) => {
         product: products
     })
 })
+
+router.delete('/realTimeProducts/:pid', (req, res) => {
+    const pid = parseInt(req.params.pid)
+
+    const index = products.findIndex(p => p.id === pid)
+    if (index === -1) {
+        return res.status(404).json({ message: 'Producto no encontrado' })
+    }
+
+    products.splice(index, 1)
+
+    res.status(200).json({
+        message: 'Producto eliminado con éxito',
+        products: products
+    })
+})
+
 
 export default router

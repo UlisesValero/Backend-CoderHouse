@@ -1,10 +1,12 @@
 <div class="container">
     <p>Trabajamos con websockets</p>
-    <form id="chat-form">
-        <input type="text" id="message" placeholder="Escribe un mensaje..." required>
-        <button type="submit">Enviar</button>
+    <form id="products-form">
+        <input type="text" id="product-name" placeholder="Nombre del producto" required>
+        <input type="text" itemid="product-price" placeholder="Precio del producto" required>
+        <button id="add-button" type="submit">Agregar producto</button>
+        <button id="delete-button" type="submit">Eliminar producto</button>
     </form>
-    <ul id="chat-log"></ul>
+    <ul id="productsList"></ul>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="./js/index.js"></script>
