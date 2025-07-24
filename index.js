@@ -10,6 +10,7 @@ const PORT = 8080
 app.use(express.json())
 
 const server = http.createServer(app)
+const sockets = new Server(server)
 
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
@@ -17,13 +18,16 @@ app.set('views', './views')
 app.use(express.static('./public'))
 
 app.use('/', productsRouter)
+app.use((req, res) => {
+    req.socket = sockets
+    req.next()
+})
 
 server.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`)
 })
 
 
-const sockets = new Server(server)
 
 let products = []
 

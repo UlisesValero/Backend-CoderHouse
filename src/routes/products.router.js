@@ -3,10 +3,15 @@ import { Router } from 'express'
 
 
 const router = Router()
-const products = []
+const products = [{name:"Ulises", price:105, descripcion:"descripcion"}]
 
 router.get('/', (req, res) => {
     res.render('home', {products})
+})
+
+
+router.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts', {products})
 })
 
 router.post('/', (req, res) => {
@@ -20,7 +25,7 @@ router.post('/', (req, res) => {
     }
     products.push(newProduct)
 
-    // req.io.emit('newProduct', products)
+    req.socket.emit('newProduct', products)
     // Vincular el endpoint con el socket
 
     res.status(201).json({
