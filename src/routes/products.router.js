@@ -1,9 +1,9 @@
 import { Router } from 'express'
-// import { readFileSync } from 'node:fs'
-
 
 const router = Router()
-const products = []
+const products = [{name: "Ulises", price: 105}]
+//Para que aparezcan productos en la vista "/", hay que cargarlos manualmente en el array products
+
 
 router.get('/', (req, res) => {
     res.render('home', {products})
@@ -20,13 +20,14 @@ router.post('/', (req, res) => {
     }
     products.push(newProduct)
 
-    // req.io.emit('newProduct', products)
-    // Vincular el endpoint con el socket
-
     res.status(201).json({
         message: "Producto creado con éxito",
         product: products
     })
+})
+
+router.get('/realTimeProducts', (req, res) => {
+    res.render('realTimeProducts')
 })
 
 router.delete('/realTimeProducts/:pid', (req, res) => {

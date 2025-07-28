@@ -4,7 +4,6 @@ import http from 'http'
 import { Server } from 'socket.io'
 import productsRouter from './src/routes/products.router.js'
 
-
 const app = express()
 const PORT = 8080
 app.use(express.json())
@@ -22,11 +21,8 @@ server.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`)
 })
 
-
 const sockets = new Server(server)
-
 let products = []
-
 
 sockets.on('connection', (socket) => {
     console.log(`Nuevo usuario conectado`)
