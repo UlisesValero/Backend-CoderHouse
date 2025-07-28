@@ -22,6 +22,7 @@ server.listen(PORT, () => {
 })
 
 const sockets = new Server(server)
+
 let products = []
 
 sockets.on('connection', (socket) => {

@@ -9,6 +9,11 @@ router.get('/', (req, res) => {
     res.render('home', {products})
 })
 
+
+router.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts', {products})
+})
+
 router.post('/', (req, res) => {
     const {name, price, description} = req.body
 
