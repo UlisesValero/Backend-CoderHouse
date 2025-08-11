@@ -7,12 +7,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "./index.js"
+    "test": "nodemon ./index.js"
   },
   "dependencies": {
     "express": "^5.1.0",
     "express-handlebars": "^8.0.3",
     "handlebars": "^4.7.8",
+    "nodemon": "^3.1.10",
     "socket.io": "^4.8.1"
   }
 }

@@ -1,6 +1,5 @@
 import { Router } from 'express'
-// import { readFileSync } from 'node:fs'
-
+import ProductsManager from '../../managers/ProductsManager'
 
 const router = Router()
 const products = [{name:"Ulises", price:105, descripcion:"descripcion"}]
@@ -15,23 +14,24 @@ router.get('/realtimeproducts', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const {name, price, description} = req.body
+    const product = req.body
 
-    const newProduct = {
-        id: products.length + 1,
-        name,
-        price,
-        description
-    }
-    products.push(newProduct)
+    // const {name, price, description} = req.body
 
-    req.socket.emit('newProduct', products)
-    // Vincular el endpoint con el socket
+    // const newProduct = {
+    //     id: products.length + 1,
+    //     name,
+    //     price,
+    //     description
+    // }
+    // products.push(newProduct)
 
-    res.status(201).json({
-        message: "Producto creado con éxito",
-        product: products
-    })
+    // req.socket.emit('newProduct', products)
+
+    // res.status(201).json({
+    //     message: "Producto creado con éxito",
+    //     product: products
+    // })
 })
 
 router.delete('/realTimeProducts/:pid', (req, res) => {
