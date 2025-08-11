@@ -4,6 +4,7 @@ import productsRouter from './src/routes/products.router.js'
 import cartsRouter from './src/routes/carts.router.js'
 
 process.loadEnvFile()
+
 const app = express()
 const PORT = 8080
 app.use(express.json())
@@ -167,3 +168,32 @@ app.listen(PORT, () => {
 })
 
 
+
+let products = []
+
+sockets.on('connection', (socket) => {
+    console.log(`Nuevo usuario conectado`)
+
+    socket.on('getProducts', (...products) => {
+        sockets.emit('getProducts', ...products)
+    })
+
+    socket.on('addProduct', (product) => {
+        product.id = products.length + 1
+
+        products.push(product)
+        sockets.emit('productsList', products)
+
+    })
+
+    socket.on('deleteProduct', ( {name} ) => {
+    
+        products = products.filter(p => p.name !== name)
+        sockets.emit('productsList', products)
+        
+    })
+
+    socket.on('disconnected', () => {
+        console.log(`Usuario desconectado`)
+    })
+})

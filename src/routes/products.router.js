@@ -2,7 +2,9 @@ import { Router } from 'express'
 import ProductsManager from '../../managers/ProductsManager'
 
 const router = Router()
-const products = [{name:"Ulises", price:105, descripcion:"descripcion"}]
+const products = [{name: "Ulises", price: 105}]
+//Para que aparezcan productos en la vista "/", hay que cargarlos manualmente en el array products
+
 
 router.get('/', (req, res) => {
     res.render('home', {products})
@@ -32,6 +34,14 @@ router.post('/', (req, res) => {
     //     message: "Producto creado con éxito",
     //     product: products
     // })
+})
+
+router.get('/realTimeProducts', (req, res) => {
+    res.render('realTimeProducts')
+})
+
+router.get('/realTimeProducts', (req, res) => {
+    res.render('realTimeProducts')
 })
 
 router.delete('/realTimeProducts/:pid', (req, res) => {
