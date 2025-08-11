@@ -40,10 +40,6 @@ router.get('/realTimeProducts', (req, res) => {
     res.render('realTimeProducts')
 })
 
-router.get('/realTimeProducts', (req, res) => {
-    res.render('realTimeProducts')
-})
-
 router.delete('/realTimeProducts/:pid', (req, res) => {
     const pid = parseInt(req.params.pid)
 
