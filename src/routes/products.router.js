@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import ProductsManager from '../../managers/ProductsManager'
 
 const router = Router()
 const products = [{name: "Ulises", price: 105}]

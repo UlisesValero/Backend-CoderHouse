@@ -1,8 +1,9 @@
-import mongoosePaginate from 'mongoose-paginate-v2'
-import { productSchema } from './Products'
+// import mongoosePaginate from 'mongoose-paginate-v2'
+import { productSchema } from './Products.js'
+import mongoose from 'mongoose'
 
 
-const cartSchema = mongoose.Schema({
+const cartSchema = new mongoose.Schema({
     products: [{
         product: {
             type: productSchema,
@@ -14,10 +15,9 @@ const cartSchema = mongoose.Schema({
             required: true,
             min: 1,
             default: 1
-        }
+        } 
     }]
 })
 
-const cartModel = mongoose.model('carts', cartSchema)
+export const cartModel = mongoose.model('Cart', cartSchema)
 
-export default cartModel
