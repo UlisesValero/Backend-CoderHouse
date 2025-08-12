@@ -1,20 +1,34 @@
 import { Router } from 'express'
+import { productModel } from '../../models/Products.js'
+import { cartModel } from '../../models/Carts.js'
+import mongoose from 'mongoose'
 
-const router = Router()
-const products = [{name: "Ulises", price: 105}]
-//Para que aparezcan productos en la vista "/", hay que cargarlos manualmente en el array products
+const productsRouter = Router()
 
+productsRouter.get('/:pid', async (req, res) => {
+try {
+    const pid = req.params
+    const product = await productModel.findById(pid)
+    if(!product){
+        console.log('no existe un producto con ese ID')
+    }
+    res.status(200).json({
+        message: product
+    })
+} catch (error) {
+    res.status(400).json({
+        // message: `No se pudo obtener el producto con ${pid}`
+    })
+}
 
-router.get('/', (req, res) => {
-    res.render('home', {products})
+    // res.render('home', {products})
 })
 
-
-router.get('/realtimeproducts', (req, res) => {
+productsRouter.get('/realtimeproducts', (req, res) => {
     res.render('realTimeProducts', {products})
 })
 
-router.post('/', (req, res) => {
+productsRouter.post('/', (req, res) => {
     const product = req.body
 
     // const {name, price, description} = req.body
@@ -35,11 +49,11 @@ router.post('/', (req, res) => {
     // })
 })
 
-router.get('/realTimeProducts', (req, res) => {
+productsRouter.get('/realTimeProducts', (req, res) => {
     res.render('realTimeProducts')
 })
 
-router.delete('/realTimeProducts/:pid', (req, res) => {
+productsRouter.delete('/realTimeProducts/:pid', (req, res) => {
     const pid = parseInt(req.params.pid)
 
     const index = products.findIndex(p => p.id === pid)
@@ -56,4 +70,4 @@ router.delete('/realTimeProducts/:pid', (req, res) => {
 })
 
 
-export default router
+export default productsRouter
