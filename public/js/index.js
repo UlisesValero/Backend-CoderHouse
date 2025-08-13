@@ -1,46 +1,38 @@
-const socket = io()
+document.addEventListener("DOMContentLoaded", () => {
+    const socket = io()
 
-const products = []
+    let cid = 0;
+    const botonCarrito = document.getElementById('boton-carrito');
 
-socket.emit('getProducts')
+    socket.emit('getCart');
 
-const deleteButton = document.getElementById('delete-button')
-const productsForm = document.getElementById('products-form')
-const nameInput = document.getElementById('product-name')
-const priceInput = document.getElementById('product-price')
-const productsList = document.getElementById('productsList')
+    socket.on('cart', (cartId) => {
+        cid = cartId;
+        if (!botonCarrito) return;
 
-productsForm.addEventListener('submit', (event) => {
-  event.preventDefault()
+        botonCarrito.style.display = cid ? 'block' : 'none';
+        if (cid) botonCarrito.href = `/carts/${cid}`;
+    });
 
-  const newProduct = {
-    name: nameInput.value,
-    price: priceInput.value
-  }
+    // Funciones para los botones
+    window.addProductToCart = async function(pid) {
+        const res = await fetch(`/api/carts/${cid}/products/${pid}`, { method: 'POST' });
+        const data = await res.json();
+        cid = data.payload?._id || cid;
+        socket.emit('postCart', cid);
+        alert('Producto agregado al carrito');
+    }
 
-  socket.emit('addProduct', newProduct)
-  nameInput.value = ''
-  priceInput.value = ''
-})
+    window.deleteCart = async function() {
+        await fetch(`/api/carts/${cid}`, { method: 'DELETE' });
+        alert('Carrito vaciado');
+        window.location.href = '/';
+    }
 
-deleteButton.addEventListener('click', () => {
-  const name = nameInput.value
-
-  if (!name) {
-    alert("Para eliminar un producto, tenes que ingresar su nombre.")
-    return
-  }
-
-  socket.emit('deleteProduct', { name })
-  nameInput.value = ''
-  priceInput.value = ''
-})
-
-socket.on('productsList', (products) => {
-  productsList.innerHTML = ''
-  products.forEach((product) => {
-    const li = document.createElement('li')
-    li.textContent = `${product.name}, precio: ${product.price}`
-    productsList.appendChild(li)
-  })
-})
+    window.deleteFromCart = async function(pid) {
+        await fetch(`/api/carts/${cid}/products/${pid}`, { method: 'DELETE' });
+        alert('Producto eliminado');
+        const productElem = document.getElementById(`cart-product-${pid}`);
+        if (productElem) productElem.remove();
+    }
+});

@@ -1,0 +1,21 @@
+<div>
+    <button onclick="deleteCart()">Vaciar carrito</button>
+    <div>
+        {{#each cart.products}}
+        <div id="cart-product-{{this.product._id}}">
+            <div>
+                <span>Cantidad: {{{this.quantity}}}</span>
+                <div>
+                    <p>{{this.product.code}}</p>
+                    <button onclick="deleteFromCart('{{{this.product._id}}}')">Eliminar de carrito</button>
+                </div>
+                <h2>{{this.title}}</h2>
+                <p><strong>Descripción:</strong> {{this.product.description}}</p>
+                <p><strong>Precio:</strong> {{this.product.price}}</p>
+                <p><strong>Categoría:</strong> {{this.product.category}}</p>
+                <p><strong>Stock:</strong> {{this.product.stock}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

@@ -1,13 +1,11 @@
 import { Router } from 'express'
 import { productModel } from '../../models/Products.js'
-import { cartModel } from '../../models/Carts.js'
-import mongoose from 'mongoose'
 
 const productsRouter = Router()
 
 productsRouter.get('/:pid', async (req, res) => {
 try {
-    const pid = req.params
+    const pid = req.params.pid
     const product = await productModel.findById(pid)
     if(!product){
         console.log('no existe un producto con ese ID')
@@ -17,57 +15,94 @@ try {
     })
 } catch (error) {
     res.status(400).json({
-        // message: `No se pudo obtener el producto con ${pid}`
+        message: `No se pudo obtener el producto`
     })
 }
-
-    // res.render('home', {products})
 })
 
-productsRouter.get('/realtimeproducts', (req, res) => {
-    res.render('realTimeProducts', {products})
-})
+productsRouter.get('/', async (req, res) => {
+    try {
+        const url = "http://localhost:8080/api"
+        const { limit = 10, page = 1, sort, query } = req.query
 
-productsRouter.post('/', (req, res) => {
-    const product = req.body
+        if (limit > 10) {
+            throw new Error("El límite de consulta es por 10 productos")
+        }
 
-    // const {name, price, description} = req.body
+        const parsedLimit = parseInt(limit)
+        const parsedPage = parseInt(page)
+        const sortOption = sort === 'desc' ? { price: -1 } : { price: 1 }
 
-    // const newProduct = {
-    //     id: products.length + 1,
-    //     name,
-    //     price,
-    //     description
-    // }
-    // products.push(newProduct)
+        const parsedQuery = query ? JSON.parse(query) : {}
+        const queryKeys = Object.keys(parsedQuery)
+        if (queryKeys.length && !queryKeys.includes('category') && !queryKeys.includes('stock')) {
+            throw new Error("Es obligatorio buscar por categoría o disponibilidad")
+        }
 
-    // req.socket.emit('newProduct', products)
+        const result = await productModel.paginate(parsedQuery, { 
+            limit: parsedLimit, 
+            page: parsedPage, 
+            sort: sortOption 
+        })
 
-    // res.status(201).json({
-    //     message: "Producto creado con éxito",
-    //     product: products
-    // })
-})
+        const link = (incomingPage) => 
+            `${url}/products?limit=${parsedLimit}&page=${incomingPage}&sort=${sort === 'desc' ? 'desc' : 'asc'}&query=${(JSON.stringify(parsedQuery))}`
 
-productsRouter.get('/realTimeProducts', (req, res) => {
-    res.render('realTimeProducts')
-})
+        res.status(200).json({
+            ...result,
+            status: "success",
+            prevLink: result.hasPrevPage ? link(result.prevPage) : null,
+            nextLink: result.hasNextPage ? link(result.nextPage) : null
+        })
 
-productsRouter.delete('/realTimeProducts/:pid', (req, res) => {
-    const pid = parseInt(req.params.pid)
-
-    const index = products.findIndex(p => p.id === pid)
-    if (index === -1) {
-        return res.status(404).json({ message: 'Producto no encontrado' })
+    } catch (err) {
+        res.status(400).json({ status: "error", payload: { message: err.message } })
     }
-
-    products.splice(index, 1)
-
-    res.status(200).json({
-        message: 'Producto eliminado con éxito',
-        products: products
-    })
 })
 
+productsRouter.post('/', async (req, res) => {
+    try {
+        const product = req.body
+        if(!product){
+            res.status(400).json({
+                message: 'Completa el body de la request para postear un producto'
+            })
+        }
+
+        const createdProduct = await productModel.create(product)
+        res.status(200).json({
+            message: 'Producto creado con éxito',
+            product: createdProduct
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
+})
+
+// productsRouter.get('/realTimeProducts', (req, res) => {
+//     res.render('realTimeProducts')
+// })
+
+// productsRouter.delete('/realTimeProducts/:pid', (req, res) => {
+//     const pid = parseInt(req.params.pid)
+
+//     const index = products.findIndex(p => p.id === pid)
+//     if (index === -1) {
+//         return res.status(404).json({ message: 'Producto no encontrado' })
+//     }
+
+//     products.splice(index, 1)
+
+//     res.status(200).json({
+//         message: 'Producto eliminado con éxito',
+//         products: products
+//     })
+// })
+
+// productsRouter.get('/realtimeproducts', (req, res) => {
+//     res.render('realTimeProducts', {products})
+// })
 
 export default productsRouter
