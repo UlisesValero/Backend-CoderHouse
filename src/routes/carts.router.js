@@ -18,14 +18,17 @@ cartsRouter.get('/:cid', async (req, res) => {
 cartsRouter.post('/:cid/products/:pid', async (req, res) => {
     try {
         const { cid, pid } = req.params
-        const cart = await cartModel.findById(cid)
+        const cart = cid == 0 ? await cartModel.create({}) : await cartModel.findById(cid)
+        console.log(cart)
+        console.log(cid)
+
         if (!cart) throw new Error("No se encontró un carrito con ese ID")
 
         const product = await productModel.findById(pid)
         if (!product) throw new Error("No se encontró un producto con ese ID")
 
         const existingProduct = cart.products.find(
-            p => p.product === pid
+            p => p.product && p.product._id.toString() === pid
         )
 
         if (existingProduct) {
@@ -62,7 +65,6 @@ cartsRouter.put("/:cid/products/:pid", async (req, res) => {
     try {
         const { quantity } = req.body
         const { pid, cid } = req.params
-        console.log(quantity)
         const cart = await cartModel.findById(cid)
         if (!cart) throw new Error("No se encontró un carrito con ese ID")
 

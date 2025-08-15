@@ -11,7 +11,7 @@ try {
         console.log('no existe un producto con ese ID')
     }
     res.status(200).json({
-        message: product
+        product
     })
 } catch (error) {
     res.status(400).json({
@@ -22,9 +22,9 @@ try {
 
 productsRouter.get('/', async (req, res) => {
     try {
-        const url = "http://localhost:8080/api"
+        const url = "http://localhost:8080"
         const { limit = 10, page = 1, sort, query } = req.query
-
+        console.log(req.query)
         if (limit > 10) {
             throw new Error("El límite de consulta es por 10 productos")
         }
@@ -81,28 +81,5 @@ productsRouter.post('/', async (req, res) => {
     }
 })
 
-// productsRouter.get('/realTimeProducts', (req, res) => {
-//     res.render('realTimeProducts')
-// })
-
-// productsRouter.delete('/realTimeProducts/:pid', (req, res) => {
-//     const pid = parseInt(req.params.pid)
-
-//     const index = products.findIndex(p => p.id === pid)
-//     if (index === -1) {
-//         return res.status(404).json({ message: 'Producto no encontrado' })
-//     }
-
-//     products.splice(index, 1)
-
-//     res.status(200).json({
-//         message: 'Producto eliminado con éxito',
-//         products: products
-//     })
-// })
-
-// productsRouter.get('/realtimeproducts', (req, res) => {
-//     res.render('realTimeProducts', {products})
-// })
 
 export default productsRouter

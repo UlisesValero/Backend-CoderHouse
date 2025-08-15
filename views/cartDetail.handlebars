@@ -1,21 +1,96 @@
-<div>
-    <button onclick="deleteCart()">Vaciar carrito</button>
+<div class="cart-container">
+    <div class="cart-header">
+        <h2>Tu carrito</h2>
+        <button id="vaciar-carrito-btn" onclick="deleteCart()">Vaciar carrito</button>
+    </div>
     <div>
         {{#each cart.products}}
-        <div id="cart-product-{{this.product._id}}">
+        <div class="cart-product" id="cart-product-{{this.product._id}}">
+            <span>Cantidad: {{this.quantity}}</span>
             <div>
-                <span>Cantidad: {{{this.quantity}}}</span>
-                <div>
-                    <p>{{this.product.code}}</p>
-                    <button onclick="deleteFromCart('{{{this.product._id}}}')">Eliminar de carrito</button>
-                </div>
-                <h2>{{this.title}}</h2>
-                <p><strong>Descripción:</strong> {{this.product.description}}</p>
-                <p><strong>Precio:</strong> {{this.product.price}}</p>
-                <p><strong>Categoría:</strong> {{this.product.category}}</p>
-                <p><strong>Stock:</strong> {{this.product.stock}}</p>
+                <p><strong>Código:</strong> {{this.product.code}}</p>
+                <button onclick="deleteFromCart('{{this.product._id}}')">Eliminar de carrito</button>
             </div>
+            <h2>{{this.product.title}}</h2>
+            <p><strong>Descripción:</strong> {{this.product.description}}</p>
+            <p><strong>Precio:</strong> ${{this.product.price}}</p>
+            <p><strong>Categoría:</strong> {{this.product.category}}</p>
+            <p><strong>Stock:</strong> {{this.product.stock}}</p>
         </div>
         {{/each}}
     </div>
 </div>
+<script type="text/javascript">
+    const boton = document.getElementById('boton-carrito')
+    console.log(boton)
+    if (boton) {
+        boton.style.display = 'none'
+    }
+</script>
+<style>
+.cart-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.cart-product {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.cart-product h2 {
+    margin: 0.5rem 0 0.2rem 0;
+    color: #007bff;
+}
+.cart-product span {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+.cart-product p {
+    margin: 0.2rem 0;
+    color: #555;
+}
+.cart-product button {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.cart-product button:hover {
+    background: #b52a37;
+}
+#vaciar-carrito-btn {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#vaciar-carrito-btn:hover {
+    background: #0056b3;
+}
+</style>

@@ -1,0 +1,135 @@
+<div>
+    <div class="pagination">
+        {{#if prevLink}}
+        <a class="btn-pagination" href="{{prevLink}}">⟵ Pestaña previa</a>
+        {{/if}}
+        {{#if nextLink}}
+        <a class="btn-pagination" href="{{nextLink}}">Siguiente pestaña ⟶</a>
+        {{/if}}
+    </div>
+
+    <div class="products-list">
+        {{#each products}}
+        <div class="card product-card" id="product-{{this._id}}">
+            <div>
+                <p class="product-code"><strong>Código:</strong> {{this.code}}</p>
+                <h2 class="product-title">{{this.title}}</h2>
+                <p class="product-desc">{{this.description}}</p>
+                <p class="product-price"><strong>Precio:</strong> ${{this.price}}</p>
+
+                <div class="flex-row">
+                    {{#if this.stock}}
+                    <button onclick="addProductToCart('{{{this._id}}}')" class="btn">Agregar al carrito</button>
+                    <div class="product-stock">{{this.stock}} disponibles</div>
+                    {{else}}
+                    <div class="product-stock out">Sin Stock</div>
+                    {{/if}}
+
+                    <a class="btn-detail" href="/products/{{this._id}}">Ver detalle</a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<style>
+body {
+    background: #f4f4f4;
+}
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.btn-pagination {
+    background: #007bff;
+    color: #fff;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.btn-pagination:hover {
+    background: #0056b3;
+}
+.products-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+}
+.product-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.product-title {
+    color: #007bff;
+    margin: 0.5rem 0 0.2rem 0;
+}
+.product-code {
+    color: #555;
+    font-size: 0.95rem;
+}
+.product-desc {
+    color: #444;
+    font-size: 1rem;
+}
+.product-price {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.product-stock {
+    color: #333;
+    font-size: 0.95rem;
+    margin-left: 1rem;
+}
+.product-stock.out {
+    color: #dc3545;
+    font-weight: bold;
+}
+.btn {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.btn:hover {
+    background: #218838;
+}
+.btn-detail {
+    background: #ffc107;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 1rem;
+    transition: background 0.2s;
+}
+.btn-detail:hover {
+    background: #e0a800;
+}
+.flex-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+.center {
+    text-align: center;
+}
+</style>
